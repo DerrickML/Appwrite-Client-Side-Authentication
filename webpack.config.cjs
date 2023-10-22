@@ -4,15 +4,15 @@ const Dotenv = require('dotenv-webpack');
 module.exports = {
   mode: 'development',  // Or 'production' for production builds
   entry: {
-    login_signin: './public/sign-login.js',
-    profile: './public/profile.js',
-    home: './public/home.js',
-    admin: './public/admin.js',
-    verify: './public/verify.js',
+    login_signin: './public/js/sign-login.js',
+    profile: './public/js/profile.js',
+    home: './public/js/home.js',
+    admin: './public/js/admin.js',
+    verify: './public/js/verify.js',
   },
   output: {
     filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'public'),
+    path: path.resolve(__dirname, 'public/js'),
   },
   module: {
     rules: [

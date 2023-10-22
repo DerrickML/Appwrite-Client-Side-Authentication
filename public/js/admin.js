@@ -105,7 +105,8 @@ function populateUserInfo () {
 
 async function fetchAllUsers () {
   try {
-    const response = await fetch('/users')
+    const response = await fetch('https://mf7l86-3000.csb.app/users', { mode: 'cors' })
+    // const response = await fetch('/users', { mode: 'cors' })
     const data = await response.json()
     allUsers = data.users
   } catch (error) {
@@ -130,7 +131,8 @@ async function deleteSelectedUsers () {
 
   document.getElementById('spinner').style.display = 'block' // Show spinner
   try {
-    const response = await fetch('/delete-user', {
+    const response = await fetch('https://mf7l86-3000.csb.app/delete-user', { mode: 'cors' }, {
+      // const response = await fetch('/delete-user', { mode: 'cors' }, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userIds }) // Send array of user IDs
