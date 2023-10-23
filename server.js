@@ -1,50 +1,25 @@
 // Importing required modules
 import express from 'express'
-import cors from 'cors';
+import cors from 'cors'
 import path from 'path'
-import {
-  client, users, account
-} from './appwriteServerConfig.js'
+import { client, users, account } from './appwriteServerConfig.js'
 
 // Initializing Express app
-const app = express();
+const app = express()
 
 /************************************************/
-
-//// List of allowed origins
-//const allowedOrigins = [
-//  'http://example1.com',
-//  'http://example2.com',
-//  'http://example3.com',
-//  // ... other origins
-//];
-
-//// Use cors middleware with dynamic origin function
-//app.use(cors({
-//  origin: function (origin, callback) {
-//    // Allow requests with no origin (like mobile apps or curl requests)
-//   if (!origin) return callback(null, true);
-
-//    // Check if the origin is in the list of allowed origins
-//    if (allowedOrigins.indexOf(origin) === -1) {
-//      const msg = 'The CORS policy for this site does not ' +
-//                  'allow access from the specified Origin.';
-//      return callback(new Error(msg), false);
-//    }
-//    return callback(null, true);
-//  },
-//  credentials: true,
-//}));
 
 /*From any origin*/
 // Use cors middleware with wildcard origin
-app.use(cors({
-  origin: '*',
-}));
+app.use(
+  cors({
+    origin: '*'
+  })
+)
 /************************************************/
 
 // Server is set up to parse JSON bodies
-app.use(express.json());
+app.use(express.json())
 
 // Serving static files from 'public' directory
 app.use(express.static(path.join(process.cwd(), 'public')))
@@ -54,23 +29,24 @@ app.use(express.static(path.join(process.cwd(), 'public')))
 /*ROUTE: User Listing*/
 app.get('/users', async (req, res) => {
   try {
-    const usersList = await users.list();  // Assuming nodeAppwriteUsers is available
-    res.json({ users: usersList.users });  // Respond with the list of users
-    console.log(res);
+    const usersList = await users.list() // Assuming nodeAppwriteUsers is available
+    res.json({ users: usersList.users }) // Respond with the list of users
+    console.log(res)
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to fetch users' });  // Updated to return JSON
+    console.error(error)
+    res.status(500).json({ error: 'Failed to fetch users' }) // Updated to return JSON
   }
-});
+})
 
 /*ROUTE: User Deletion*/
 app.post('/delete-user', async (req, res) => {
-  const userIds = req.body.userIds;
+  const userIds = req.body.userIds
+  console.log(userIds)
   if (!userIds || userIds.length === 0) {
     return res.status(400).send('User IDs are required');
   }
 
-  const errors = [];  // Array to hold any errors that occur
+  const errors = [] // Array to hold any errors that occur
 
   for (const userId of userIds) {
     try {
@@ -82,13 +58,13 @@ app.post('/delete-user', async (req, res) => {
   }
 
   if (errors.length > 0) {
-    res.status(500).json({ errors });  // Send back any errors that occurred
+    res.status(500).json({ errors }) // Send back any errors that occurred
   } else {
-    res.send('Users deleted successfully');
+    res.send('Users deleted successfully')
   }
-});
+})
 
 // ===== STARTING THE SERVER =====
 app.listen(3000, () => {
-  console.log('Server is running on port 3000');
-});
+  console.log('Server is running on port 3000')
+})

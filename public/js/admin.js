@@ -1,3 +1,4 @@
+import { account } from './appwriteConfig.js'
 import './logout.js'
 
 // Global variables to store all users and manage pagination
@@ -12,11 +13,13 @@ const userList = document.getElementById('user-list')
 const spinner = document.getElementById('spinner')
 const profileButton = document.getElementById('profileButton')
 const homeButton = document.getElementById('homeButton')
+const deleteButton = document.getElementById('delete-button')
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', onDocumentLoaded)
 prevPageButton.addEventListener('click', prevPage)
 nextPageButton.addEventListener('click', nextPage)
+deleteButton.addEventListener('click', deleteSelectedUsers)
 if (profileButton)
   profileButton.addEventListener('click', () => navigateTo('profile.html'))
 if (homeButton)
@@ -105,7 +108,7 @@ function populateUserInfo () {
 
 async function fetchAllUsers () {
   try {
-    const response = await fetch('https://fn4jdg-3000.csb.app/users', { mode: 'cors' })
+    const response = await fetch('https://mf7l86-3000.csb.app/users', { mode: 'cors' })
     // const response = await fetch('/users', { mode: 'cors' })
     const data = await response.json()
     allUsers = data.users
@@ -122,29 +125,28 @@ function navigateTo (url) {
   window.location.href = url
 }
 
-async function deleteSelectedUsers () {
-  toggleSpinner(true)
-  const checkboxes = [
-    ...document.querySelectorAll('input[type="checkbox"]:checked')
-  ]
-  const userIds = checkboxes.map(checkbox => checkbox.value)
+async function deleteSelectedUsers() {
+  toggleSpinner(true);
+  const checkboxes = [...document.querySelectorAll('input[type="checkbox"]:checked')];
+  const userIds = checkboxes.map(checkbox => checkbox.value);
 
-  document.getElementById('spinner').style.display = 'block' // Show spinner
+  document.getElementById('spinner').style.display = 'block'; // Show spinner
   try {
-    const response = await fetch('https://fn4jdg-3000.csb.app/users', { mode: 'cors' }, {
-      // const response = await fetch('/delete-user', { mode: 'cors' }, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userIds }) // Send array of user IDs
-    })
-    if (!response.ok) {
-      const errorText = await response.text()
-      console.error('Error deleting users:', errorText)
-    }
+      const response = await fetch('https://mf7l86-3000.csb.app/delete-user', { 
+          method: 'POST',  // Specify the method here
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userIds })  // Send array of user IDs
+      });
+      if (!response.ok) {
+          const errorText = await response.text();
+          console.error('Error deleting users:', errorText);
+      }
   } catch (error) {
-    console.error('Error deleting users:', error)
+      console.error('Error deleting users:', error);
   }
-  await fetchAllUsers() // Refresh the user list
-  renderUsers() // Render the updated user list
-  document.getElementById('spinner').style.display = 'none' // Hide spinner
+
+  await fetchAllUsers(); // Refresh the user list
+  renderUsers(); // Render the updated user list
+  document.getElementById('spinner').style.display = 'none'; // Hide spinner
 }
+
