@@ -21,6 +21,7 @@ verifyButton?.addEventListener('click', handleVerificationClick);
 function onDocumentLoaded() {
     try {
         const user = JSON.parse(localStorage.getItem('userInfo'));
+        console.log('User Information: ' + user);
         if (user) {
             populateUserInfo(user);
             checkVerificationStatus(user);
@@ -55,10 +56,12 @@ function populateAdminLink(labels) {
 }
 
 function checkVerificationStatus(user) {
+    console.log('Email Verification:', user?.emailVerification);
     if (user?.emailVerification) {
         verificationStatusElement.textContent = 'Verified ✅';
     } else {
-        verificationSectionElement.style.display = 'block';
+        verificationStatusElement.textContent = 'Not Verified ❌';
+        verifyButton.style.display = 'block';
     }
 }
 
@@ -73,7 +76,8 @@ async function handleVerificationClick() {
 
 async function verify() {
     try {
-        const response = await account.createVerification('http://localhost:5501/verify.html');
+        const response = await account.createVerification('https://v1q1.c10.e2-4.dev/tests/appwrite-client-side/public/verify.html');
+        console.log('Sending verification link ...')
         console.log(response);
     } catch (error) {
         console.log(error);
