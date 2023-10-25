@@ -12,6 +12,12 @@ const loginPassword = document.getElementById('loginPassword');
 const signupLoader = document.getElementById('signupLoader');
 const loginLoader = document.getElementById('loginLoader');
 
+//Vars defined globally for signup from the form
+const email = signupEmail.value;
+const password = signupPassword.value;
+const phone = signupPhone.value;
+const username = signupUsername.value;
+
 // Event Listeners
 signupForm.addEventListener('submit', onSignupSubmit);
 loginForm.addEventListener('submit', onLoginSubmit);
@@ -24,17 +30,13 @@ function toggleLoader(loader, toggle) {
 async function onSignupSubmit(e) {
   e.preventDefault();
 
-  const email = signupEmail.value;
-  const password = signupPassword.value;
-  const phone = signupPhone.value;
-  const username = signupUsername.value;
-
   toggleLoader(signupLoader, true);
 
   try {
     await performSignup(email, password, username);
     await performLogin(email, password);
     const accountDetails = await fetchAccountDetails();
+    alert('Debugging');
     handleAccountDetails(accountDetails, 'home.html');
   } catch (error) {
     alert('Error: ' + error.message);
@@ -74,6 +76,16 @@ async function performLogin(email, password) {
   const response = await account.createEmailSession(email, password);
   console.log('Logging in successful:', response);
   localStorage.setItem('sessionData', JSON.stringify(response));
+  if(phone==''){}
+  else{
+    await updatePhone(phone, password);
+  }
+  return response;
+}
+
+async function updatePhone(phone, password){
+  const response = await account.updatePhone(phone, password);
+  console.log('Phone update status:', response);
   return response;
 }
 
