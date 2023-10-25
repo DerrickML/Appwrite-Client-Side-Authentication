@@ -9,6 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/profile.css">
     <script src="js/loggedin.js"></script>
 </head>
 
@@ -63,7 +64,7 @@
                         <!-- <button id="verifyPhoneButton" class="btn btn-primary" style="display:none;">Verify Phone</button>-->
 
                         <!-- Button trigger modal -->
-                        <button id="verifyPhoneButton" type="button" class="btn btn-primary" data-bs-toggle="modal"
+                        <button id="secretCodeModal" type="button" class="btn btn-primary" data-bs-toggle="modal"
                             data-bs-target="#staticBackdrop">
                             Verify Phone
                         </button>
@@ -82,11 +83,15 @@
                                         <p>Please enter the verification code sent to your phone:</p>
                                         <input type="text" class="form-control" id="verificationCode"
                                             placeholder="Verification Code">
+                                        <p id="loadingText" class="loading" style="display:none;">Verifying</p>
+                                        <p id="errorText" style="color:red; display:none;"></p>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
+                                        <button id="verifyPhoneButton" type="button" class="btn btn-info" style="display:none;">Send Code</button>
+                                        <button id="verifyCancelButton" type="button" class="btn btn-secondary"
                                             data-bs-dismiss="modal">Cancel</button>
-                                        <button id="secretCodeButton" type="button" class="btn btn-primary">Submit</button>
+                                        <button id="secretCodeButton" type="button"
+                                            class="btn btn-primary" style="display:none;">Submit</button>
                                     </div>
                                 </div>
                             </div>
