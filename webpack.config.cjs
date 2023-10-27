@@ -4,7 +4,7 @@ const Dotenv = require('dotenv-webpack');
 module.exports = {
   mode: 'development',  // Or 'production' for production builds
   entry: {
-    login_signin: './public/js/sign-login.js',
+    authentication: './public/js/authentication.js',
     profile: './public/js/profile.js',
     home: './public/js/home.js',
     admin: './public/js/admin.js',

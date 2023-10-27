@@ -160,6 +160,9 @@ async function verifyEmail () {
     // const response = await account.createVerification(
     //   'http://localhost:5501/public/verify.html'
     // )
+    // const response = await account.createVerification(
+    //   'http://192.168.100.12:5501/public/verify.html'
+    // )
     console.log('Sending verification link ...')
     console.log(response)
     emailVerificationStatusElement.textContent =
@@ -176,6 +179,7 @@ async function verifyPhone () {
     const response = await account.createPhoneVerification()
     console.log('Sending verification link ...')
     console.log(response)
+    verifyPhoneButton.style.display = 'none'
     secretCodeButton.style.display = 'block'
 
     // Open the modal on success
