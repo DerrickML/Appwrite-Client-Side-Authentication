@@ -155,7 +155,7 @@ async function handleSecretCodeVerificationClick () {
 async function verifyEmail () {
   try {
     const response = await account.createVerification(
-      'https://v1q1.c10.e2-4.dev/tests/appwrite-client-side/public/verify.html'
+      'derrickml.github.io/Appwrite-Client-Side-Authentication/public/verify.html'
     )
     // const response = await account.createVerification(
     //   'http://localhost:5501/public/verify.html'
