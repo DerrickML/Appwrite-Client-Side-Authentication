@@ -1,4 +1,4 @@
-import { client, account } from './appwriteConfig.js'
+import { client, account, databases, database_id, studentTable_id } from './appwriteConfig.js'
 import './logout.js'
 
 // DOM Elements
@@ -206,4 +206,23 @@ async function verificationCode (userID, secretCode) {
     console.log(error)
     throw error
   }
+}
+
+async function createStudent(parentID, firstName, secondName, otherName, schooolName, schoolAddress, gender, studClass, studentPassCode ){
+  try{
+    const response = await databases.createDocument(database_id, studentTable_id, 'unique()',
+    {
+      //Pass through the student information
+      parID: parentID,
+      firstName: firstName,
+      secondName: secondName,
+      otherName: otherName,
+      schooolName: schooolName,
+      schoolAddress: schoolAddress,
+      gender: gender,
+      class: studClass,
+      studPassCode: studentPassCode
+    }
+    );
+  }catch(error){}
 }
