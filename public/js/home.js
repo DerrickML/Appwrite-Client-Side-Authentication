@@ -97,18 +97,20 @@ async function createStudent (
       'unique()',
       {
         parID: parentID,
+        class: studClass,
         firstName: firstName,
         secondName: secondName,
         otherName: otherName,
+        gender: gender,
         schooolName: schooolName,
         schoolAddress: schoolAddress,
-        gender: gender,
-        class: studClass,
         studPassCode: studentPassCode
       }
     )
     // Handle the response, e.g., close the modal or show a success message
+    console.log(response)
   } catch (error) {
+    console.log(response)
     console.error('Error creating student:', error)
     // Inform the user about the error
     alert('There was an error creating the student profile. Please try again.')
