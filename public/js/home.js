@@ -79,40 +79,48 @@ function saveStudentProfile() {
     );
 }
 
-async function createStudent (
-  parentID,
-  firstName,
-  secondName,
-  otherName,
-  schooolName,
-  schoolAddress,
-  gender,
-  studClass,
-  studentPassCode
-) {
-  try {
-    const response = await databases.createDocument(
-      database_id,
-      studentTable_id,
-      'unique()',
-      {
-        parID: parentID,
-        class: studClass,
-        firstName: firstName,
-        secondName: secondName,
-        otherName: otherName,
-        gender: gender,
-        schooolName: schooolName,
-        schoolAddress: schoolAddress,
-        studPassCode: studentPassCode
+async function createStudent(
+    parentID,
+    firstName,
+    secondName,
+    otherName,
+    schoolName,
+    schoolAddress,
+    gender,
+    studClass,
+    studentPassCode
+  ) {
+    try {
+      const response = await fetch('https://mf7l86-3000.csb.app/create-student', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          parentID,
+          firstName,
+          secondName,
+          otherName,
+          schoolName,
+          schoolAddress,
+          gender,
+          studClass,
+          studentPassCode,
+        }),
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        console.log(data);
+        // Handle the response, e.g., close the modal or show a success message
+        alert('Student profile created successfully!');
+      } else {
+        throw new Error(data.error);
       }
-    )
-    // Handle the response, e.g., close the modal or show a success message
-    console.log(response)
-  } catch (error) {
-    console.log(response)
-    console.error('Error creating student:', error)
-    // Inform the user about the error
-    alert('There was an error creating the student profile. Please try again.')
+    } catch (error) {
+      console.error('Error creating student:', error);
+      // Inform the user about the error
+      alert('There was an error creating the student profile. Please try again.');
+    }
   }
-}
