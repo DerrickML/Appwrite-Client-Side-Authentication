@@ -23,19 +23,21 @@ profileButton?.addEventListener(
   'click',
   () => (window.location.href = 'profile.html')
 )
-document.getElementById('createStudentProfileModal').addEventListener('show.bs.modal', resetModalContent);
+document
+  .getElementById('createStudentProfileModal')
+  .addEventListener('show.bs.modal', resetModalContent)
 
-function resetModalContent() {
-    // Reset the form
-    document.getElementById('studentForm').reset();
-    
-    // Show the form and the addProfile button
-    document.getElementById('studentForm').style.display = 'block';
-    document.getElementById('addProfile').style.display = 'block';
-    
-    // Hide the spinner and success message
-    document.getElementById('spinnerContainer').style.display = 'none';
-    document.getElementById('successMessage').style.display = 'none';
+function resetModalContent () {
+  // Reset the form
+  document.getElementById('studentForm').reset()
+
+  // Show the form and the addProfile button
+  document.getElementById('studentForm').style.display = 'block'
+  document.getElementById('addProfile').style.display = 'block'
+
+  // Hide the spinner and success message
+  document.getElementById('spinnerContainer').style.display = 'none'
+  document.getElementById('successMessage').style.display = 'none'
 }
 
 function onDocumentLoaded () {
@@ -127,7 +129,15 @@ async function createStudent (
         schoolName: schoolName,
         schoolAddress: schoolAddress,
         studPassCode: studentPassCode
-      }
+      },
+      [
+        Permission.read(Role.user(parentID)),
+        Permission.update(Role.user(parentID)),
+        Permission.delete(Role.user(parentID)),
+        Permission.update(Role.team("admin")),
+        Permission.read(Role.team("admin")),
+        Permission.delete(Role.team("admin")),
+      ]
     )
     // Hide the spinner and show the success message
     document.getElementById('spinnerContainer').style.display = 'none'
