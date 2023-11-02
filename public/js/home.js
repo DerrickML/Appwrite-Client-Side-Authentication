@@ -25,7 +25,7 @@ profileButton?.addEventListener(
 )
 
 function onDocumentLoaded () {
-    console.log(userInfo)
+  console.log(userInfo)
   console.log('userName:', userInfo?.name)
   updateUsernameDisplay(userInfo?.name)
 }
@@ -34,52 +34,39 @@ function updateUsernameDisplay (name) {
   usernameDisplay.innerText = name ? `${name}!` : 'User!'
 }
 
-function formatStudentClass(studClass) {
-    switch (studClass) {
-        case 'Primary 7':
-            return 'Primary_7';
-        case 'Senior 4':
-            return 'Senior_4';
-        case 'Senior 6':
-            return 'Senior_6';
-        default:
-            return studClass; // return original value if no match
-    }
+function formatStudentClass (studClass) {
+  switch (studClass) {
+    case 'Primary 7':
+      return 'Primary_7'
+    case 'Senior 4':
+      return 'Senior_4'
+    case 'Senior 6':
+      return 'Senior_6'
+    default:
+      return studClass // return original value if no match
+  }
 }
 
-function saveStudentProfile() {
-    // Get the values from the form fields
-    const firstName = document.getElementById('firstName').value;
-    const secondName = document.getElementById('secondName').value;
-    const otherName = document.getElementById('otherName').value;
-    const schoolName = document.getElementById('schoolName').value;
-    const schoolAddress = document.getElementById('schoolAddress').value;
-    const gender = document.getElementById('gender').value;
-    let studClass = document.getElementById('studentClass').value; // Made it let since we'll be modifying it
-    const studentPassCode = document.getElementById('studentPassCode').value;
+function saveStudentProfile () {
+  // Get the values from the form fields
+  const firstName = document.getElementById('firstName').value
+  const secondName = document.getElementById('secondName').value
+  const otherName = document.getElementById('otherName').value
+  const schoolName = document.getElementById('schoolName').value
+  const schoolAddress = document.getElementById('schoolAddress').value
+  const gender = document.getElementById('gender').value
+  let studClass = document.getElementById('studentClass').value // Made it let since we'll be modifying it
+  const studentPassCode = document.getElementById('studentPassCode').value
 
-    // Format the studClass value
-    studClass = formatStudentClass(studClass);
+  // Format the studClass value
+  studClass = formatStudentClass(studClass)
 
-    // Assuming you have a parentID value, for this example, I'll set it to a placeholder value
-    const parentID = userInfo.uID;
-    console.log('ParentID: ' + parentID);
+  // Assuming you have a parentID value, for this example, I'll set it to a placeholder value
+  const parentID = userInfo.uID
+  console.log('ParentID: ' + parentID)
 
-    // Call the createStudent function
-    createStudent(
-        parentID,
-        firstName,
-        secondName,
-        otherName,
-        schoolName,
-        schoolAddress,
-        gender,
-        studClass,
-        studentPassCode
-    );
-}
-
-async function createStudent(
+  // Call the createStudent function
+  createStudent(
     parentID,
     firstName,
     secondName,
@@ -89,38 +76,42 @@ async function createStudent(
     gender,
     studClass,
     studentPassCode
-  ) {
-    try {
-      const response = await fetch('https://mf7l86-3000.csb.app/create-student', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          parentID,
-          firstName,
-          secondName,
-          otherName,
-          schoolName,
-          schoolAddress,
-          gender,
-          studClass,
-          studentPassCode,
-        }),
-      });
-  
-      const data = await response.json();
-  
-      if (response.ok) {
-        console.log(data);
-        // Handle the response, e.g., close the modal or show a success message
-        alert('Student profile created successfully!');
-      } else {
-        throw new Error(data.error);
+  )
+}
+
+async function createStudent (
+  parentID,
+  firstName,
+  secondName,
+  otherName,
+  schoolName,
+  schoolAddress,
+  gender,
+  studClass,
+  studentPassCode
+) {
+  try {
+    const response = await databases.createDocument(
+      database_id,
+      studentTable_id,
+      'unique()',
+      {
+        parID: parentID,
+        class: studClass,
+        firstName: firstName,
+        secondName: secondName,
+        otherName: otherName,
+        gender: gender,
+        schoolName: schoolName,
+        schoolAddress: schoolAddress,
+        studPassCode: studentPassCode
       }
-    } catch (error) {
-      console.error('Error creating student:', error);
-      // Inform the user about the error
-      alert('There was an error creating the student profile. Please try again.');
-    }
+    )
+    // Handle the response, e.g., close the modal or show a success message
+    console.log(response)
+  } catch (error) {
+    console.error('Error creating student:', error)
+    // Inform the user about the error
+    alert('There was an error creating the student profile. Please try again.')
   }
+}
