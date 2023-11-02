@@ -53,12 +53,15 @@
                 <div class="d-flex justify-content-between">
                     <div class="profile-card">
                         <!-- Add dynamic profile content here -->
+                        derrick
                     </div>
                     <div class="profile-card">
                         <!-- Add dynamic profile content here -->
+                        joan
                     </div>
                     <div class="profile-card">
                         <!-- Add dynamic profile content here -->
+                        alexander
                     </div>
                 </div>
                 <a id="profileAddition" class="btn btn-secondary" data-bs-toggle="modal"
@@ -68,7 +71,7 @@
     </div>
 
     <!-- Create Student Profile Modal -->
-    <div class="modal fade" id="createStudentProfileModal" tabindex="-1"
+    <div class="modal fade" id="createStudentProfileModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="createStudentProfileModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -77,7 +80,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <!-- Form -->
+                    <form id="studentForm">
                         <!-- Names (first, second, other) on the same row for large screens -->
                         <div class="row">
                             <div class="col-lg-4 mb-3">
@@ -126,14 +130,27 @@
                         <!-- 4-Digit Student Passcode -->
                         <div class="mb-3">
                             <label for="studentPassCode" class="form-label">* Student PassCode (4 digits)</label>
-                            <input type="text" class="form-control" id="studentPassCode" pattern="\d{4}" required>
+                            <input type="number" class="form-control" id="studentPassCode" pattern="\d{4}" required>
                             <div class="form-text">Enter a 4-digit passcode.</div>
                         </div>
                     </form>
+                    <!-- Spinner(s) -->
+                    <div class="d-flex justify-content-center" style="display: none;">
+                        <div id="spinnerContainer" class="spinner-border text-primary" role="status"
+                            style="display: none;">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+
+                    <!-- Success Message -->
+                    <div id="successMessage" style="display: none;">
+                        <p class="text-success text-center">Profile successfully created!</p>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" id="addProfile" class="btn btn-primary">Save Profile</button>
+                    <button type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">Close</button>
+                    <button type="submit" id="addProfile" class="btn btn-primary">Create Profile</button>
                 </div>
             </div>
         </div>

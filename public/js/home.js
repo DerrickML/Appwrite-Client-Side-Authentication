@@ -23,6 +23,20 @@ profileButton?.addEventListener(
   'click',
   () => (window.location.href = 'profile.html')
 )
+document.getElementById('createStudentProfileModal').addEventListener('show.bs.modal', resetModalContent);
+
+function resetModalContent() {
+    // Reset the form
+    document.getElementById('studentForm').reset();
+    
+    // Show the form and the addProfile button
+    document.getElementById('studentForm').style.display = 'block';
+    document.getElementById('addProfile').style.display = 'block';
+    
+    // Hide the spinner and success message
+    document.getElementById('spinnerContainer').style.display = 'none';
+    document.getElementById('successMessage').style.display = 'none';
+}
 
 function onDocumentLoaded () {
   console.log(userInfo)
@@ -48,6 +62,11 @@ function formatStudentClass (studClass) {
 }
 
 async function saveStudentProfile () {
+  // Hide the form and show the spinner, and hide the submit button too
+  document.getElementById('studentForm').style.display = 'none'
+  document.getElementById('addProfile').style.display = 'none'
+  document.getElementById('spinnerContainer').style.display = 'block'
+
   // Get the values from the form fields
   const firstName = document.getElementById('firstName').value
   const secondName = document.getElementById('secondName').value
@@ -61,12 +80,12 @@ async function saveStudentProfile () {
   // Format the studClass value
   studClass = formatStudentClass(studClass)
 
-  // Assuming you have a parentID value, for this example, I'll set it to a placeholder value
+  // ParentID value
   const parentID = userInfo.uID
   console.log('ParentID: ' + parentID)
 
   //Encrypted Pass-code
-  const encryptedPassCode = await encryptPasscode(studentPassCode);
+  const encryptedPassCode = await encryptPasscode(studentPassCode)
 
   // Call the createStudent function
   createStudent(
@@ -110,10 +129,19 @@ async function createStudent (
         studPassCode: studentPassCode
       }
     )
-    // Handle the response, e.g., close the modal or show a success message
+    // Hide the spinner and show the success message
+    document.getElementById('spinnerContainer').style.display = 'none'
+    document.getElementById('successMessage').style.display = 'block'
+
     console.log(response)
   } catch (error) {
     console.error('Error creating student:', error)
+
+    // Hide the spinner and show the form again
+    document.getElementById('spinnerContainer').style.display = 'none'
+    document.getElementById('addProfile').style.display = 'block'
+    document.getElementById('studentForm').style.display = 'block'
+
     // Inform the user about the error
     alert('There was an error creating the student profile. Please try again.')
   }
