@@ -51,18 +51,7 @@
             <div class="card-body">
                 <h2 class="card-title">Student Profiles</h2>
                 <div class="d-flex justify-content-between">
-                    <div class="profile-card">
-                        <!-- Add dynamic profile content here -->
-                        derrick
-                    </div>
-                    <div class="profile-card">
-                        <!-- Add dynamic profile content here -->
-                        joan
-                    </div>
-                    <div class="profile-card">
-                        <!-- Add dynamic profile content here -->
-                        alexander
-                    </div>
+                    <!-- Dynamically Generated Profiles -->
                 </div>
                 <a id="profileAddition" class="btn btn-secondary" data-bs-toggle="modal"
                     data-bs-target="#createStudentProfileModal">Add Student Profile</a>
@@ -71,8 +60,8 @@
     </div>
 
     <!-- Create Student Profile Modal -->
-    <div class="modal fade" id="createStudentProfileModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="createStudentProfileModalLabel" aria-hidden="true">
+    <div class="modal fade" id="createStudentProfileModal" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="createStudentProfileModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -148,8 +137,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary"
-                        data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" id="addProfile" class="btn btn-primary">Create Profile</button>
                 </div>
             </div>

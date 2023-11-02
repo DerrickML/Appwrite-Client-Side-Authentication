@@ -3,6 +3,9 @@ import {
   client,
   account,
   databases,
+  Permission,
+  Role,
+  Query,
   database_id,
   studentTable_id
 } from './appwriteConfig.js'
@@ -40,10 +43,21 @@ function resetModalContent () {
   document.getElementById('successMessage').style.display = 'none'
 }
 
-function onDocumentLoaded () {
+async function onDocumentLoaded () {
   console.log(userInfo)
   console.log('userName:', userInfo?.name)
   updateUsernameDisplay(userInfo?.name)
+
+  // Fetch student profiles
+  const profiles = await fetchStudentProfiles()
+
+  // Get the container
+  const container = document.querySelector('.d-flex.justify-content-between')
+
+  // Generate and append profile cards
+  profiles.forEach(profile => {
+    container.innerHTML += generateProfileCard(profile)
+  })
 }
 
 function updateUsernameDisplay (name) {
@@ -134,11 +148,13 @@ async function createStudent (
         Permission.read(Role.user(parentID)),
         Permission.update(Role.user(parentID)),
         Permission.delete(Role.user(parentID)),
-        Permission.update(Role.team("admin")),
-        Permission.read(Role.team("admin")),
-        Permission.delete(Role.team("admin")),
       ]
     )
+    // [
+    //     Permission.read(Role.user(parentID), Role.team('admin')),
+    //     Permission.update(Role.user(parentID), Role.team('admin')),
+    //     Permission.delete(Role.user(parentID), Role.team('admin')),
+    //   ]
     // Hide the spinner and show the success message
     document.getElementById('spinnerContainer').style.display = 'none'
     document.getElementById('successMessage').style.display = 'block'
@@ -169,3 +185,45 @@ async function encryptPasscode (passcode) {
   const data = await response.json()
   return data.encryptedData
 }
+
+/********* LOAD PROFILES *************/
+function generateProfileCard (profile) {
+    console.log(' Profiles: '+ profile.firstName)
+  return `
+        <div class="profile-card">
+            <h3>${profile.firstName} ${profile.secondName}</h3>
+            <p>Class: ${profile.class}</p>
+            <p>School: ${profile.schoolName}</p>
+            <p>Address: ${profile.schoolAddress}</p>
+        </div>
+    `
+}
+
+// async function fetchStudentProfiles () {
+//   try {
+//     const response = await databases.listDocuments(database_id, studentTable_id)
+//     return response.documents
+
+//   } catch (error) {
+//     console.error('Error fetching student profiles:', error)
+//     return []
+//   }
+// }
+
+async function fetchStudentProfiles() {
+    try {
+      // Build the query to filter profiles by parentID
+      const query = [
+        Query.equal('parID', userInfo.uID)
+      ];
+  
+      // Fetch the profiles using the query
+      const response = await databases.listDocuments(database_id, studentTable_id, query);
+      return response.documents;
+  
+    } catch (error) {
+      console.error('Error fetching student profiles:', error);
+      return [];
+    }
+  }  
+/*************************************/
