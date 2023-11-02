@@ -121,7 +121,7 @@ async function createStudent (
 
 // Encrypt Pass-code
 async function encryptPasscode (passcode) {
-  const response = await fetch('/encrypt', {
+  const response = await fetch('https://mf7l86-3000.csb.app/encrypt', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
