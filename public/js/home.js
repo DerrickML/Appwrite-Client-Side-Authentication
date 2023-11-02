@@ -47,7 +47,7 @@ function formatStudentClass (studClass) {
   }
 }
 
-function saveStudentProfile () {
+async function saveStudentProfile () {
   // Get the values from the form fields
   const firstName = document.getElementById('firstName').value
   const secondName = document.getElementById('secondName').value
@@ -65,6 +65,9 @@ function saveStudentProfile () {
   const parentID = userInfo.uID
   console.log('ParentID: ' + parentID)
 
+  //Encrypted Pass-code
+  const encryptedPassCode = await encryptPasscode(studentPassCode);
+
   // Call the createStudent function
   createStudent(
     parentID,
@@ -75,7 +78,7 @@ function saveStudentProfile () {
     schoolAddress,
     gender,
     studClass,
-    studentPassCode
+    encryptedPassCode
   )
 }
 
@@ -114,4 +117,17 @@ async function createStudent (
     // Inform the user about the error
     alert('There was an error creating the student profile. Please try again.')
   }
+}
+
+// Encrypt Pass-code
+async function encryptPasscode (passcode) {
+  const response = await fetch('/encrypt', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ passcode: passcode })
+  })
+  const data = await response.json()
+  return data.encryptedData
 }
