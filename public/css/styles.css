@@ -50,8 +50,8 @@ h1.logo-name {
     text-align: center;
 }
 
-.loader {
-    display: none; /* Hide by default */
+/* .loader {
+    display: none;
     margin-left: 10px;
 }
 
@@ -111,4 +111,4 @@ h1.logo-name {
     50% { opacity: 1; }
     100% { opacity: 0; }
 }
-
+ */

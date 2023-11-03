@@ -200,7 +200,7 @@ function generateProfileCard(profile) {
         <div class="profile-card text-center">
             <div class="initials-circle" style="background-color: ${randomColor};">${initials}</div>
             <h3>${profile.firstName}</h3>
-            <p>Class: ${profile.class}</p>
+            <p>${profile.class}</p>
         </div>
     </div>
   `;

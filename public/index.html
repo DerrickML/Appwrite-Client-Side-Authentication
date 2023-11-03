@@ -5,81 +5,107 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Appwrite Signup/Login Example</title>
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
 
-<div class="container">
-    <div class="row mt-5">
-        <div class="col-md-6 offset-md-3">
-            <div class="text-center">
-                <h1 class="logo-name">CrownzCom</h1>
-            </div>
-            <button type="button" class="btn btn-primary btn-block mt-4" data-toggle="modal" data-target="#signupModal">
-                Signup
-            </button>
-            <button type="button" class="btn btn-secondary btn-block mt-2" data-toggle="modal" data-target="#loginModal">
-                Login
-            </button>
-        </div>
-    </div>
-
-    <!-- Signup Modal -->
-    <div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="signupModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="signupModalLabel">Signup</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-md-6 offset-md-3">
+                <div class="text-center">
+                    <h1 class="logo-name">CrownzCom</h1>
                 </div>
-                <div class="modal-body">
-                    <form id="signupForm" action="/signup" method="post">
-                        <input type="email" id="signupEmail" name="email" placeholder="Email" required class="form-control">
-                        <input type="password" id="signupPassword" name="password" placeholder="Password" required class="form-control mt-2">
-                        <input type="text" id="signupPhone" name="phone" placeholder="Phone Number" required pattern="\+\d{1,3}\d{10,15}" title="Phone number must start with '+' followed by the country code and the local number, with no spaces, e.g., +16175551212" class="form-control mt-2">
-                        <input type="text" id="signupUsername" name="username" placeholder="Username" required class="form-control mt-2">
-                        <button type="submit" class="btn btn-primary mt-2 btn-block">Signup <span class="loader" id="signupLoader"></span></button>
-                    </form>
-                </div>
+                <!-- Signup Button -->
+                <button type="button" class="btn btn-primary w-100 mt-4" data-bs-toggle="modal"
+                    data-bs-target="#signupModal">
+                    Signup
+                </button>
+                <!-- Login Button -->
+                <button type="button" class="btn btn-secondary w-100 mt-2" data-bs-toggle="modal"
+                    data-bs-target="#loginModal">
+                    Login
+                </button>
             </div>
         </div>
-    </div>
 
-    <!-- Login Modal -->
-    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="loginModalLabel">Login</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="loginForm" action="/login" method="post">
-                        <input type="email" id="loginEmail" name="email" placeholder="Email" required class="form-control">
-                        <input type="password" id="loginPassword" name="password" placeholder="Password" required class="form-control mt-2">
-                        <button type="submit" class="btn btn-primary mt-2 btn-block">Login <span class="loader" id="loginLoader"></span></button>
-                    </form>
+        <!-- Signup Modal -->
+        <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="signupModalLabel">Signup</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="signupForm" action="/signup" method="post">
+                            <div class="mb-3">
+                                <input type="email" id="signupEmail" name="email" placeholder="Email" required
+                                    class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <input type="password" id="signupPassword" name="password" placeholder="Password"
+                                    required class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" id="signupPhone" name="phone" placeholder="Phone Number" required
+                                    pattern="\+\d{1,3}\d{10,15}"
+                                    title="Phone number must start with '+' followed by the country code and the local number, with no spaces, e.g., +16175551212"
+                                    class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" id="signupUsername" name="username" placeholder="Username" required
+                                    class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Signup <span
+                                    class="spinner-border spinner-border-sm d-inline-block" role="status"
+                                    aria-hidden="true" id="signupLoader"></span>
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <!-- Login Modal -->
+        <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="loginModalLabel">Login</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="loginForm" action="/login" method="post">
+                            <div class="mb-3">
+                                <input type="email" id="loginEmail" name="email" placeholder="Email" required
+                                    class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <input type="password" id="loginPassword" name="password" placeholder="Password"
+                                    required class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Login <span
+                                    class="spinner-border spinner-border-sm d-inline-block" role="status"
+                                    aria-hidden="true" id="loginLoader"></span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
-</div>
-
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<!-- <script type="module" src="js/login_signin.bundle.js"></script> -->
-<script type="module" src="js/authentication.bundle.js"></script>
+    <!-- Bootstrap 5.3 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <script type="module" src="js/authentication.bundle.js"></script>
 
 </body>
+
 </html>
