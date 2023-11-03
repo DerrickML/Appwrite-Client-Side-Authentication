@@ -51,13 +51,13 @@ async function onDocumentLoaded () {
   // Fetch student profiles
   const profiles = await fetchStudentProfiles()
 
-  // Get the container
-  const container = document.querySelector('.d-flex.justify-content-between')
+// Get the container
+const container = document.querySelector('.row.justify-content-center');
 
-  // Generate and append profile cards
-  profiles.forEach(profile => {
-    container.innerHTML += generateProfileCard(profile)
-  })
+// Generate and append profile cards
+profiles.forEach(profile => {
+  container.innerHTML += generateProfileCard(profile);
+});
 }
 
 function updateUsernameDisplay (name) {
@@ -187,28 +187,34 @@ async function encryptPasscode (passcode) {
 }
 
 /********* LOAD PROFILES *************/
-function generateProfileCard (profile) {
-    console.log(' Profiles: '+ profile.firstName)
+function generateProfileCard(profile) {
+  // Extract the first letter from the first and second names
+  const initials = `${profile.firstName.charAt(0)}${profile.secondName.charAt(0)}`;
+  // Generate a random color
+  const randomColor = getRandomColor();
+
+  // Generate the HTML for the profile card with a circle for the initials
+  // Now wrapped in a col-auto
   return `
-        <div class="profile-card">
-            <h3>${profile.firstName} ${profile.secondName}</h3>
+    <div class="col-auto mb-3">
+        <div class="profile-card text-center">
+            <div class="initials-circle" style="background-color: ${randomColor};">${initials}</div>
+            <h3>${profile.firstName}</h3>
             <p>Class: ${profile.class}</p>
-            <p>School: ${profile.schoolName}</p>
-            <p>Address: ${profile.schoolAddress}</p>
         </div>
-    `
+    </div>
+  `;
 }
 
-// async function fetchStudentProfiles () {
-//   try {
-//     const response = await databases.listDocuments(database_id, studentTable_id)
-//     return response.documents
-
-//   } catch (error) {
-//     console.error('Error fetching student profiles:', error)
-//     return []
-//   }
-// }
+// Function to generate a random color in hexadecimal format
+function getRandomColor() {
+  const letters = '0123456789ABCDEF';
+  let color = '#';
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
 
 async function fetchStudentProfiles() {
     try {
