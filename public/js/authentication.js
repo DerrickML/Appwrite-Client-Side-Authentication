@@ -126,7 +126,7 @@ function handleAccountDetails (accountDetails, redirectURL) {
 
     window.location.href = redirectURL
   } else {
-    // alert(JSON.stringify(accountDetails))
+    alert(JSON.stringify(accountDetails))
   }
 }
 
