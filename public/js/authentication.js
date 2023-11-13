@@ -146,6 +146,9 @@ async function onSignupSubmit (e) {
     // //Login
     const performLogin = await performLogin(signupData)
     console.log('login data: ' + performLogin)
+    alert(
+      'Logged in successfully'
+    )
 
     // //account update
     const updatePhone = await updatePhone(signupData)
