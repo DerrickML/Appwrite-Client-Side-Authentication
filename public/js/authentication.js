@@ -135,7 +135,7 @@ async function onSignupSubmit (e) {
     phone: elements.signupPhone.value,
   }
 
-  try {
+  // try {
     //Signup
     const signUpStatus = await performSignup(signupData)
     console.log('SignUp status: ' + signUpStatus.status)
@@ -143,20 +143,20 @@ async function onSignupSubmit (e) {
       'Account Creation Finished! ... SignUp status: ' + signUpStatus.status
     )
 
-    //Login
-    const performLogin = await performLogin(signupData)
-    console.log('login data: ' + performLogin)
+    // //Login
+    // const performLogin = await performLogin(signupData)
+    // console.log('login data: ' + performLogin)
 
     // //account update
     // const updatePhone = await updatePhone(signupData)
     // console.log('update phone: ' + updatePhone)
 
-  } catch (error) {
-    alert('Error at Signup: ' + error.message)
-  } finally {
+  // } catch (error) {
+  //   alert('Error at Signup: ' + error.message)
+  // } finally {
     toggleLoader(elements.signupLoader, false)
     submitButton.disabled = false
-  }
+  // }
 }
 /************************* */
 // async function onSignupSubmit (e) {
