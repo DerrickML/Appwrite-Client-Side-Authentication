@@ -102,7 +102,7 @@ async function updatePhone ({phone, password}) {
 }
 
 // Document Creation Function on server-side
-async function createParentDoc (parentData) {
+async function createParentDoc({parent_ID, firstName, secondName, email, phoneNumber, passCode}) {
   // const response = await fetch('http://localhost:3000/createParentDoc', {
     const response = await fetch('https://mf7l86-3000.csb.app/createParentDoc', {
     method: 'POST',
@@ -130,22 +130,34 @@ async function onSignupSubmit(e) {
     email: elements.signupEmail.value,
     password: elements.signupPassword.value,
     firstName: elements.firstName.value,
+    secondName: elements.secondName.value,
     phone: elements.signupPhone.value,
+    passCode: elements.password.value,
+    parent_ID: accountDetails.$id,
   }
 
   try {
+    // create account
     const signUpStatus = await performSignup(signupData)
     console.log('SignUp status: ' + signUpStatus.status)
     alert('Account Creation Finished! ... SignUp status: ' + signUpStatus.status)
 
+    // Create account session
     const loginResponse = await performLogin(signupData)
     console.log('login data: ' + loginResponse)
     alert('Logged in successfully')
 
+    // Update phone number
     const phoneUpdateResponse = await updatePhone(signupData)
     console.log('update phone: ' + phoneUpdateResponse)
 
+    //Create account doc in parent collection
+    const parentDocResponse = await createParentDoc(signupData)
+    console.log('create parent doc: ' + parentDocResponse)    
+
+    //Redirect to profile page
     handleAccountDetails(accountDetails, 'profileSelect.html')
+
   } catch (error) {
     alert('Error at Signup: ' + error.message)
   } finally {
