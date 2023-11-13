@@ -48,10 +48,6 @@
                     </div>
                     <div class="modal-body">
                         <form id="signupForm" action="/signup" method="post">
-                            <!-- <div class="mb-3">
-                                <input type="text" id="signupUsername" name="username" placeholder="Username" required
-                                    class="form-control">
-                            </div> -->
                             <div class="mb-3">
                                 <input type="text" id="firstName" name="firstName" placeholder="First Name" required
                                     class="form-control">
@@ -72,7 +68,7 @@
                             </div>
                             <div class="mb-3">
                                 <input type="number" id="signupPassCode" name="password" placeholder="4-digit pass-code"
-                                    required class="form-control" pattern="d{4}">
+                                    required class="form-control" pattern="\d{4}">
                             </div>
                             <div class="mb-3">
                                 <input type="password" id="signupPassword" name="signupPassword" placeholder="Password"

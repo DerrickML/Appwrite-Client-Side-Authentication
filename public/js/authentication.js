@@ -92,7 +92,7 @@ async function performLogin ({ email, password }) {
   accountDetails = await fetchAccountDetails()
 
   alert('Login func run successfully')
-  return response, accountDetails
+  return response
 }
 
 async function updatePhone ({phone, password}) {
@@ -120,14 +120,12 @@ async function createParentDoc (parentData) {
 }
 
 // Event Handlers
-
-async function onSignupSubmit (e) {
+async function onSignupSubmit(e) {
   e.preventDefault()
   const submitButton = e.target.querySelector('button[type="submit"]')
   submitButton.disabled = true
   toggleLoader(elements.signupLoader, true)
 
-  //Signup data
   const signupData = {
     email: elements.signupEmail.value,
     password: elements.signupPassword.value,
@@ -136,27 +134,18 @@ async function onSignupSubmit (e) {
   }
 
   try {
-    //Signup
     const signUpStatus = await performSignup(signupData)
     console.log('SignUp status: ' + signUpStatus.status)
-    alert(
-      'Account Creation Finished! ... SignUp status: ' + signUpStatus.status
-    )
+    alert('Account Creation Finished! ... SignUp status: ' + signUpStatus.status)
 
-    // //Login
-    const performLogin = await performLogin(signupData)
-    console.log('login data: ' + performLogin)
-    alert(
-      'Logged in successfully'
-    )
+    const loginResponse = await performLogin(signupData)
+    console.log('login data: ' + loginResponse)
+    alert('Logged in successfully')
 
-    // //account update
-    const updatePhone = await updatePhone(signupData)
-    console.log('update phone: ' + updatePhone)
+    const phoneUpdateResponse = await updatePhone(signupData)
+    console.log('update phone: ' + phoneUpdateResponse)
 
-    //Direct to profiles page
     handleAccountDetails(accountDetails, 'profileSelect.html')
-
   } catch (error) {
     alert('Error at Signup: ' + error.message)
   } finally {
@@ -164,7 +153,8 @@ async function onSignupSubmit (e) {
     submitButton.disabled = false
   }
 }
-async function onLoginSubmit (e) {
+
+async function onLoginSubmit(e) {
   e.preventDefault()
   const submitButton = e.target.querySelector('button[type="submit"]')
   submitButton.disabled = true
@@ -177,7 +167,6 @@ async function onLoginSubmit (e) {
 
   try {
     await performLogin(loginData)
-    // accountDetails = await fetchAccountDetails()
     handleAccountDetails(accountDetails, 'profileSelect.html')
   } catch (error) {
     alert('Error: ' + error.message)
