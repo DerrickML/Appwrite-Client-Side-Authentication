@@ -9,6 +9,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="css/styles.css">
+    <script>
+        // Clear local storage
+        localStorage.setItem('sessionData', JSON.stringify({}));
+        localStorage.setItem('userInfo', JSON.stringify({}));
+        console.log('Local storage cleared successfully.');
+    </script>
 </head>
 
 <body>
@@ -42,13 +48,21 @@
                     </div>
                     <div class="modal-body">
                         <form id="signupForm" action="/signup" method="post">
+                            <!-- <div class="mb-3">
+                                <input type="text" id="signupUsername" name="username" placeholder="Username" required
+                                    class="form-control">
+                            </div> -->
                             <div class="mb-3">
-                                <input type="email" id="signupEmail" name="email" placeholder="Email" required
+                                <input type="text" id="firstName" name="firstName" placeholder="First Name" required
                                     class="form-control">
                             </div>
                             <div class="mb-3">
-                                <input type="password" id="signupPassword" name="password" placeholder="Password"
-                                    required class="form-control">
+                                <input type="text" id="secondName" name="secondName" placeholder="Second Name" required
+                                    class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <input type="email" id="signupEmail" name="email" placeholder="Email" required
+                                    class="form-control">
                             </div>
                             <div class="mb-3">
                                 <input type="text" id="signupPhone" name="phone" placeholder="Phone Number" required
@@ -57,10 +71,15 @@
                                     class="form-control">
                             </div>
                             <div class="mb-3">
-                                <input type="text" id="signupUsername" name="username" placeholder="Username" required
-                                    class="form-control">
+                                <input type="number" id="signupPassCode" name="password" placeholder="4-digit pass-code"
+                                    required class="form-control" pattern="d{4}">
                             </div>
-                            <button type="submit" class="btn btn-primary w-100">Signup <span
+                            <div class="mb-3">
+                                <input type="password" id="signupPassword" name="signupPassword" placeholder="Password"
+                                    required class="form-control">
+                            </div>
+
+                            <button type="submit" id="signUp" class="btn btn-primary w-100">Signup <span
                                     class="spinner-border spinner-border-sm d-inline-block" role="status"
                                     aria-hidden="true" id="signupLoader"></span>
                             </button>
@@ -88,7 +107,7 @@
                                 <input type="password" id="loginPassword" name="password" placeholder="Password"
                                     required class="form-control">
                             </div>
-                            <button type="submit" class="btn btn-primary w-100">Login <span
+                            <button type="submit" id="logIn" class="btn btn-primary w-100">Login <span
                                     class="spinner-border spinner-border-sm d-inline-block" role="status"
                                     aria-hidden="true" id="loginLoader"></span>
                             </button>

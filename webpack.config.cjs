@@ -9,6 +9,7 @@ module.exports = {
     home: './public/js/home.js',
     admin: './public/js/admin.js',
     verify: './public/js/verify.js',
+    profileSelection: './public/js/profileSelection.js',
   },
   output: {
     filename: '[name].bundle.js',
