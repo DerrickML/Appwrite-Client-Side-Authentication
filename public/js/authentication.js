@@ -1,4 +1,13 @@
-import { client, account } from './appwriteConfig.js'
+// Import statements
+import {
+  account,
+  databases,
+  database_id,
+  parentsTable_id
+} from './appwriteConfig.js'
+
+//VARS
+let accountDetails
 
 // DOM Elements
 const elements = {
@@ -7,96 +16,31 @@ const elements = {
   signupEmail: document.getElementById('signupEmail'),
   signupPassword: document.getElementById('signupPassword'),
   signupPhone: document.getElementById('signupPhone'),
-  signupUsername: document.getElementById('signupUsername'),
+  firstName: document.getElementById('firstName'),
+  secondName: document.getElementById('secondName'),
   loginEmail: document.getElementById('loginEmail'),
+  signupPassCode: document.getElementById('signupPassCode'),
   loginPassword: document.getElementById('loginPassword'),
   signupLoader: document.getElementById('signupLoader'),
   loginLoader: document.getElementById('loginLoader')
 }
 
-document.addEventListener('DOMContentLoaded', event => {
-  elements.signupLoader.style.visibility = 'hidden'
-  elements.loginLoader.style.visibility = 'hidden'
-})
-
-// Hide loaders initially
-elements.signupLoader.style.visibility = 'hidden'
-elements.loginLoader.style.visibility = 'hidden'
-
-// Event Listeners
-elements.signupForm.addEventListener('submit', onSignupSubmit)
-elements.loginForm.addEventListener('submit', onLoginSubmit)
-
-async function onSignupSubmit (e) {
-  e.preventDefault()
-  const submitButton = e.target.querySelector('button[type="submit"]')
-  submitButton.disabled = true // Disable the button
-  toggleLoader(elements.signupLoader, true)
-
-  const signupData = {
-    email: elements.signupEmail.value,
-    password: elements.signupPassword.value,
-    phone: elements.signupPhone.value,
-    username: elements.signupUsername.value
-  }
-
-  try {
-    console.log('SignUp email: ' + signupData.email)
-    await performSignup(signupData)
-    await performLogin(signupData.email, signupData.password)
-    await updatePhone(signupData.phone, signupData.password)
-    const accountDetails = await fetchAccountDetails()
-    handleAccountDetails(accountDetails, 'home.html')
-  } catch (error) {
-    alert('Error at Signup: ' + error.message)
-  } finally {
-    toggleLoader(elements.signupLoader, false)
-    submitButton.disabled = false // Re-enable the button
-  }
+// Utility Functions
+function toggleLoader (loaderElement, show) {
+  loaderElement.style.visibility = show ? 'visible' : 'hidden'
 }
 
-async function onLoginSubmit (e) {
-  e.preventDefault()
-  const submitButton = e.target.querySelector('button[type="submit"]')
-  submitButton.disabled = true // Disable the button
-  toggleLoader(elements.loginLoader, true)
-
-  const loginData = {
-    email: elements.loginEmail.value,
-    password: elements.loginPassword.value
-  }
-
-  try {
-    await performLogin(loginData.email, loginData.password)
-    const accountDetails = await fetchAccountDetails()
-    handleAccountDetails(accountDetails, 'home.html')
-  } catch (error) {
-    alert('Error: ' + error.message)
-  } finally {
-    toggleLoader(elements.loginLoader, false)
-    submitButton.disabled = false // Re-enable the button
-  }
-}
-
-async function performSignup ({ email, password, username }) {
-  localStorage.clear()
-  const response = await account.create('unique()', email, password, username)
-  console.log('Signup is successful:', response)
-  return response
-}
-
-async function performLogin (email, password) {
-  localStorage.clear()
-  const response = await account.createEmailSession(email, password)
-  console.log('Logging in successful:', response)
-  localStorage.setItem('sessionData', JSON.stringify(response))
-  return response
-}
-
-async function updatePhone (phone, password) {
-  const response = await account.updatePhone(phone, password)
-  console.log('Phone update status:', response)
-  return response
+// Encrypt Pass-code
+async function encryptPasscode (passcode) {
+  const response = await fetch('https://mf7l86-3000.csb.app/encrypt', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ passcode: passcode })
+  })
+  const data = await response.json()
+  return data.encryptedData
 }
 
 async function fetchAccountDetails () {
@@ -126,10 +70,188 @@ function handleAccountDetails (accountDetails, redirectURL) {
 
     window.location.href = redirectURL
   } else {
-    alert(JSON.stringify(accountDetails))
+    // Handle the case where account details are not in the expected status
   }
 }
 
-function toggleLoader (loaderElement, show) {
-  loaderElement.style.visibility = show ? 'visible' : 'hidden'
+// Authentication Functions
+async function performSignup ({ email, password, firstName }) {
+  localStorage.clear()
+  const response = await account.create('unique()', email, password, firstName)
+  console.log('Signup is successful:', response)
+  return response
 }
+
+async function performLogin ({ email, password }) {
+  localStorage.clear()
+
+  const response = await account.createEmailSession(email, password)
+  console.log('Logging in successful:', response)
+  localStorage.setItem('sessionData', JSON.stringify(response))
+
+  accountDetails = await fetchAccountDetails()
+
+  alert('Login func run successfully')
+  return response, accountDetails
+}
+
+async function updatePhone ({phone, password}) {
+  const response = await account.updatePhone(phone, password)
+  console.log('Phone update status:', response)
+  return response
+}
+
+// Document Creation Function on server-side
+async function createParentDoc (parentData) {
+  // const response = await fetch('http://localhost:3000/createParentDoc', {
+    const response = await fetch('https://mf7l86-3000.csb.app/createParentDoc', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(parentData)
+  })
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`)
+  }
+
+  return await response.json()
+}
+
+// Event Handlers
+
+async function onSignupSubmit (e) {
+  e.preventDefault()
+  const submitButton = e.target.querySelector('button[type="submit"]')
+  submitButton.disabled = true
+  toggleLoader(elements.signupLoader, true)
+
+  //Signup data
+  const signupData = {
+    email: elements.signupEmail.value,
+    password: elements.signupPassword.value,
+    firstName: elements.firstName.value,
+    phone: elements.signupPhone.value,
+  }
+
+  try {
+    //Signup
+    const signUpStatus = await performSignup(signupData)
+    console.log('SignUp status: ' + signUpStatus.status)
+    alert(
+      'Account Creation Finished! ... SignUp status: ' + signUpStatus.status
+    )
+
+    //Login
+    const performLogin = await performLogin(signupData)
+    console.log('login data: ' + performLogin)
+
+    // //account update
+    // const updatePhone = await updatePhone(signupData)
+    // console.log('update phone: ' + updatePhone)
+
+  } catch (error) {
+    alert('Error at Signup: ' + error.message)
+  } finally {
+    toggleLoader(elements.signupLoader, false)
+    submitButton.disabled = false
+  }
+}
+/************************* */
+// async function onSignupSubmit (e) {
+//   e.preventDefault()
+//   const submitButton = e.target.querySelector('button[type="submit"]')
+//   submitButton.disabled = true
+//   toggleLoader(elements.signupLoader, true)
+
+//   const parData = {
+//     email: elements.signupEmail.value,
+//     password: elements.signupPassword.value,
+//     phone: elements.signupPhone.value,
+//     firstName: elements.firstName.value
+//   }
+//   /*******/
+//   const signupData = {
+//     email: elements.signupEmail.value,
+//     password: elements.signupPassword.value,
+//     firstName: elements.firstName.value
+//   }
+//   /*******/
+
+//   const parTableData = {
+//     email: elements.signupEmail.value,
+//     password: elements.signupPassword.value,
+//     phone: elements.signupPhone.value,
+//     firstName: elements.firstName.value,
+//     secondName: elements.secondName.value,
+//     passCode: elements.signupPassCode.value
+//   }
+
+//   try {
+//     console.log('SignUp email: ' + parData.email)
+//     const signUpStatus = await performSignup(signupData)
+//     console.log('SignUp status: ' + signUpStatus.status)
+//     alert('SignUp status: ' + signUpStatus.status)
+
+//     // await performLogin(parData.email, parData.password)
+//     // await updatePhone(parData.phone, parData.password)
+
+//     // Fetch account details to get the user's unique ID
+//     // accountDetails = await fetchAccountDetails()
+//     // const parent_ID = accountDetails.$id
+//     // console.log('1 - Parent ID is: ' + parent_ID)
+
+//     // //Encrypted Pass-code
+//     // const encryptedPassCode = await encryptPasscode(parTableData.passCode)
+//     // await createParentDoc({
+//     //   parent_ID: parent_ID,
+//     //   firstName: parTableData.firstName,
+//     //   secondName: parTableData.secondName,
+//     //   email: parTableData.email,
+//     //   phoneNumber: parTableData.phone,
+//     //   passCode: encryptedPassCode
+//     // })
+
+//     alert('Account Creation Finished!')
+//     // accountDetails = await fetchAccountDetails()
+//     // handleAccountDetails(accountDetails, 'profileSelect.html')
+//   } catch (error) {
+//     alert('Error at Signup: ' + error.message)
+//   } finally {
+//     toggleLoader(elements.signupLoader, false)
+//     submitButton.disabled = false
+//   }
+// }
+/*************************************  * */
+async function onLoginSubmit (e) {
+  e.preventDefault()
+  const submitButton = e.target.querySelector('button[type="submit"]')
+  submitButton.disabled = true
+  toggleLoader(elements.loginLoader, true)
+
+  const loginData = {
+    email: elements.loginEmail.value,
+    password: elements.loginPassword.value
+  }
+
+  try {
+    await performLogin(loginData)
+    // accountDetails = await fetchAccountDetails()
+    handleAccountDetails(accountDetails, 'profileSelect.html')
+  } catch (error) {
+    alert('Error: ' + error.message)
+  } finally {
+    toggleLoader(elements.loginLoader, false)
+    submitButton.disabled = false
+  }
+}
+
+// Event Listeners
+document.addEventListener('DOMContentLoaded', () => {
+  toggleLoader(elements.signupLoader, false)
+  toggleLoader(elements.loginLoader, false)
+})
+
+elements.signupForm.addEventListener('submit', onSignupSubmit)
+elements.loginForm.addEventListener('submit', onLoginSubmit)
