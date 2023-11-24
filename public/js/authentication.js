@@ -109,7 +109,7 @@ async function createParentDoc({parent_ID, firstName, secondName, email, phoneNu
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(parentData)
+    body: JSON.stringify({ parent_ID, firstName, secondName, email, phoneNumber, passCode })
   })
 
   if (!response.ok) {
